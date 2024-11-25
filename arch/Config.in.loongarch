@@ -1,0 +1,50 @@
+# loongarch config
+config BR2_LOONGARCH_CPU_LOONGARCH64
+	bool
+	select BR2_LOONGARCH_NAN_LEGACY
+
+choice
+	prompt "Target Architecture Variant"
+	default BR2_loongarch_64 if BR2_loongarch64
+	depends on BR2_loongarch64
+	help
+	  Specific CPU variant to use
+
+config BR2_loongarch_64
+	bool "Generic LOONGARCH64"
+	depends on BR2_ARCH_IS_64
+	select BR2_LOONGARCH_CPU_LOONGARCH64
+	select	BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+endchoice
+
+config BR2_LOONGARCH_NAN_LEGACY
+	bool
+
+#config BR2_GCC_TARGET_NAN
+#	default "legacy"	if BR2_LOONGARCH_NAN_LEGACY
+
+config BR2_ARCH
+	default "loongarch64"	if BR2_loongarch64
+
+config BR2_NORMALIZED_ARCH
+	default "loongarch"
+
+config BR2_ENDIAN
+	default "LITTLE"	if BR2_loongarch64
+
+config BR2_GCC_TARGET_ARCH
+	default "loongarch64"	if BR2_loongarch_64
+
+config BR2_READELF_ARCH_NAME
+	default "LoongArch"
+
+config BR2_LOONGARCH_SOFT_FLOAT
+        bool "Use soft-float"
+        #default y
+        select BR2_SOFT_FLOAT
+        help
+          If your target CPU does not have a Floating Point Unit (FPU)
+          or a kernel FPU emulator, but you still wish to support
+          floating point functions, then everything will need to be
+          compiled with soft floating point support (-msoft-float).
+
